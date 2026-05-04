@@ -9,17 +9,26 @@ function StatusPill({ status }) {
   return <span className={`status-pill status-pill--${toneMap[status] || "neutral"}`}>{status}</span>;
 }
 
-export function DocumentTable({ documents }) {
+export function DocumentTable({ documents, categories, selectedCategory, onCategoryChange }) {
   return (
     <section className="panel">
       <div className="panel__header">
         <div>
           <p className="panel__label">Registry</p>
-          <h3>Tracked documents</h3>
+          <h3>Tracked documents ({documents.length})</h3>
         </div>
         <div className="filter-row">
-          <button className="button button--ghost">All types</button>
-          <button className="button button--ghost">This month</button>
+          {categories.map((category) => (
+            <button
+              key={category}
+              className={`button button--ghost ${
+                selectedCategory === category ? "filter-button--active" : ""
+              }`}
+              onClick={() => onCategoryChange(category)}
+            >
+              {category}
+            </button>
+          ))}
         </div>
       </div>
 

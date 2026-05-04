@@ -1,3 +1,4 @@
+import { useState, useMemo } from "react";
 import { Header } from "./components/Header";
 import { OverviewCards } from "./components/OverviewCards";
 import { StatusBoard } from "./components/StatusBoard";
@@ -7,6 +8,23 @@ import { sampleDocuments, recentActivity, statusGroups } from "./data/sampleData
 import "./styles/app.css";
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const categories = useMemo(() => {
+    const cats = new Set(sampleDocuments.map((doc) => doc.category));
+    return ["All", ...Array.from(cats)];
+  }, []);
+
+  const filteredDocuments = useMemo(() => {
+    return sampleDocuments.filter((doc) => {
+      const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           doc.owner.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === "All" || doc.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchTerm, selectedCategory]);
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -37,7 +55,7 @@ function App() {
       </aside>
 
       <main className="main-content">
-        <Header />
+        <Header searchTerm={searchTerm} onSearch={setSearchTerm} />
         <OverviewCards documents={sampleDocuments} />
 
         <section className="content-grid">
@@ -45,7 +63,12 @@ function App() {
           <ActivityPanel activity={recentActivity} />
         </section>
 
-        <DocumentTable documents={sampleDocuments} />
+        <DocumentTable 
+          documents={filteredDocuments} 
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
       </main>
     </div>
   );
