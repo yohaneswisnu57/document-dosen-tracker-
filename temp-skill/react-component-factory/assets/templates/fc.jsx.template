@@ -1,0 +1,17 @@
+import React from 'react';
+import './{{name}}.css';
+
+/**
+ * {{name}} component
+ * 
+ * @param {Object} props
+ * @param {string} [props.className] - Optional custom class name
+ * @param {React.ReactNode} [props.children] - Component children
+ */
+export const {{name}} = ({ className = '', children, ...props }) => {
+  return (
+    <div className={`{{name-kebab}} ${className}`} {...props}>
+      {children}
+    </div>
+  );
+};

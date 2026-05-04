@@ -1,0 +1,16 @@
+import React, { Component } from 'react';
+import './{{name}}.css';
+
+/**
+ * {{name}} class component
+ */
+export class {{name}} extends Component {
+  render() {
+    const { className = '', children, ...props } = this.props;
+    return (
+      <div className={`{{name-kebab}} ${className}`} {...props}>
+        {children}
+      </div>
+    );
+  }
+}
